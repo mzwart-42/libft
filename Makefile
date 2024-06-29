@@ -4,7 +4,7 @@ GREEN := $(shell tput -T xterm setaf 2)
 YELLOW := $(shell tput -T xterm setaf 3)
 BLUE := $(shell tput -T xterm setaf 4)
 PURPLE := $(shell tput -T xterm setaf 5)
-WHITE := $(shell tput -T xterm setaf 7)
+WHITE := $(shell tput -T xterm setaf 15)
 RESET := $(shell tput -T xterm setaf sgr0)
 # ---------------------------------------------------------------------------------
 
@@ -42,7 +42,8 @@ ft_striteri.c \
 ft_putchar_fd.c \
 ft_putstr_fd.c \
 ft_putendl_fd.c \
-ft_putnbr_fd.c
+ft_putnbr_fd.c \
+ft_putnbr_base.c
 
 BONUS_SRC = \
 ft_lstnew.c \
@@ -55,52 +56,48 @@ ft_lstclear.c \
 ft_lstiter.c \
 ft_lstmap.c
 
+# adding printf to src files and include dir
+
 # in the future create a seperate folder for seperate parts that
 # are consistenly structured so you can do recursive make?
+
+PRINTF_FOLDER = ft_printf
 PRINTF_SRC = \
 char_specifiers.c \
 int_specifiers.c \
 ft_printf.c
 
-HEADER_FILES = \
-ft_printf.h \
-libft.h
-
-PRINTF_DIR = ft_printf
-INCLUDE_DIR = include
-
-SRC_PRINTF := $(addprefix ./$(PRINTF_DIR)/, $(PRINTF_SRC))
-HEADERS = $(addprefix ./$(INCLUDE_DIR)/, $(HEADER_FILES))
+SRC_PRINTF := $(addprefix ./$(PRINTF_FOLDER)/, $(PRINTF_SRC))
 
 SRC += $(SRC_PRINTF)
 
-OBJ = $(SRC:.c=.o)
-BONUS_OBJ = $(BONUS_SRC:.c=.o)
+
+INCLUDE_DIR = include
+HEADER_FILES = ft_printf.h libft.h
+HEADERS = $(addprefix ./$(INCLUDE_DIR)/, $(HEADER_FILES))
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 ARFLAGS = crU
 
-NAME = libft.a
+NAME := libft.a
+OBJ := $(SRC:.c=.o)
+BONUS_OBJ := $(BONUS_SRC:.c=.o)
 
-all: $(NAME) $(HEADERS)
 
-$(NAME): $(OBJ)
-	$(AR) $(ARFLAGS) $@ $^
+all: $(NAME)
+
+$(NAME): $(OBJ) $(HEADERS)
+	$(AR) $(ARFLAGS) $@ $(OBJ)
 
 %.o: %.c
-	@echo -n $(BLUE)
 	$(CC) $(CFLAGS) -c $^ -o $@
 
 clean:
-	@echo -n $(RED)
 	rm -f $(OBJ) $(BONUS_OBJ)
-	@echo -n $(WHITE)
 
 fclean: clean
-	@echo -n $(RED)
 	rm -f $(NAME)
-	@echo -n $(WHITE)
 
 re: fclean all
 

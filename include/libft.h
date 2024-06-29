@@ -14,7 +14,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
-# include <bsd/string.h>
+# include <string.h>
 # include <string.h>
 # include <stddef.h>
 # include <stdint.h>
@@ -78,5 +78,4 @@ void		ft_putchar_fd(char c, int fd);
 void		ft_putstr_fd(char *str, int fd);
 void		ft_putendl_fd(char *str, int fd);
 void		ft_putnbr_fd(int n, int fd);
-
 #endif
