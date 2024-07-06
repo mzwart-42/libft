@@ -9,8 +9,7 @@
 /*   Updated: 2024/02/01 16:55:06 by mzwart           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../include/ft_printf.h"
+#include "ft_printf.h"
 
 static	void	reverse_str(char **buffer, uint8_t len)
 {

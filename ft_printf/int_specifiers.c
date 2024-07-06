@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_printf.h"
+#include "ft_printf.h"
 
 // INT_MIN(11 chars) + 1 for null terminator
 char	*decimal(va_list format_args)

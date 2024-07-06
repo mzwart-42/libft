@@ -9,9 +9,8 @@
 /*   Updated: 2024/02/27 16:14:49 by mzwart           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../include/ft_printf.h"
-#include "../include/libft.h"
+#include "ft_printf.h"
+//#include "../include/libft.h"
 
 static void	vec_initialize(t_vector *vec, size_t size)
 {

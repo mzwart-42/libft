@@ -9,9 +9,8 @@
 /*   Updated: 2024/02/01 16:54:22 by mzwart           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../include/ft_printf.h"
-#include "../include/libft.h"
+#include "ft_printf.h"
+#include "../libft.h"
 
 char	*string(va_list format_args)
 {
