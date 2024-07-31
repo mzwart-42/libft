@@ -7,7 +7,6 @@ PURPLE := $(shell tput -T xterm setaf 5)
 WHITE := $(shell tput -T xterm setaf 7)
 RESET := $(shell tput -T xterm setaf sgr0)
 # ------------------------------ configurable -----------------------------------
-
 # -MMD generates makefile dependencies that tell make which source file depend
 #  on what headers. These get generated at the same time when the source files are compiled
 DEP_FLAGS = -MMD -MP
@@ -18,20 +17,16 @@ INCLUDE_PATHS = ./include
 # (not used by gcc)
 BUILD_DIR = ./build
 
-# recursive make calls
-# SUB_DIRS :=
-# RECURSIVE_MAKE_FLAGS = --no-print-directory
-# COMPILIED_ARCHIVE_FILE_PATHS :=
-# ARCHIVE_FILES := $(notdir $(LIB_ARCHIVE_FILE_PATH))
-
-# [c] do not warn about library creation
+# [c] do not warn about creation of file
 # [r] eplace existing or insert new file(s) into the archive
-# [U] set time stamps needed for replacement using archive(member) function
+# [U] set time stamps needed for replacement using make's archive(member) function
 ARFLAGS = rcU
 NAME = libft.a
 
-# List of all default modules (check recipes)
+# List of all sub modules made when calling 'Make'. (check recipes for submodules)
 SUB_MODULES = requent string memory printing lst
+# This can be used to change the module list when recursively calling this Makefile.
+# use flag: -e SUB_MODULES="list of sub modules here ..."
 
 # ---------------------------------------------------------------------------------
 # (All variables suffixed with _SRC will be turned into variables suffixed with _OBJ)
@@ -127,8 +122,8 @@ $(foreach var, $(ALL_SRC_VARS), $(eval $(patsubst %_SRC, %_OBJ, $(var)) := $($(v
 #     ft_isascii.c \
 # )
 
-# Create dependency files so make knows when a header file belong to a specific
-# obj file has been changed
+# This does NOT create, but lists the names of the dependency files which 'Make' uses to know
+# when an obj dpending on a header needs to be rebuild, when that header file has changed.
 ALL_OBJ_VARS := $(filter %_OBJ, $(.VARIABLES))
 ALL_OBJ_DEPS := $(patsubst %.o, %.d, $(foreach var, $(ALL_OBJ_VARS), $($(var))))
 # -------------------------------------------------------------------------
@@ -159,3 +154,6 @@ fclean: clean
 -include $(ALL_OBJ_DEPS)
 
 .PHONY:	clean fclean re all $(SUB_MODULES)
+
+#.RECIPE: print-%
+#    @echo "$*"
