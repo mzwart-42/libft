@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 # include <stdarg.h>
 # include <unistd.h>
 # include <stddef.h>
 # include <stdint.h>
+# include <stdlib.h>
 
 # define VEC_SIZE 42
 
@@ -29,12 +29,11 @@ typedef struct s_vector
 
 typedef char	*(*t_va_function)(va_list);
 
-// COMPILER ATTRIBUTE
-// int	ft_printf(const char *format, ...)
-// __attribute__ ((format (printf, 1, 2)));
+// COMPILER ATTRIBUTE FOR FORMATTING WARNINGS
+int			ft_printf(const char *format, ...)
+			__attribute__ ((format (printf, 1, 2)));
+
 int			ft_printf(const char *format, ...);
-
-
 
 char		*echo_percent(va_list nothing);
 char		*decimal(va_list format_args);
@@ -44,8 +43,6 @@ char		*chars(va_list format_args);
 char		*hex(va_list format_args);
 char		*capital_hex(va_list format_args);
 char		*void_ptr(va_list format_args);
-
-#include <stdlib.h>
 
 //helper
 size_t		ft_strlen(const char *str);
