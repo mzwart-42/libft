@@ -1,20 +1,57 @@
-# ------------------------------------ COLORS -------------------------------------
+# --------------------------------- COLORS --------------------------------------
 RED := $(shell tput -T xterm setaf 1)
 GREEN := $(shell tput -T xterm setaf 2)
 YELLOW := $(shell tput -T xterm setaf 3)
 BLUE := $(shell tput -T xterm setaf 4)
 PURPLE := $(shell tput -T xterm setaf 5)
-WHITE := $(shell tput -T xterm setaf 15)
+WHITE := $(shell tput -T xterm setaf 7)
 RESET := $(shell tput -T xterm setaf sgr0)
-# ---------------------------------------------------------------------------------
+# ------------------------------ configurable -----------------------------------
 
-BOOL_SRC = \
+# -MMD generates makefile dependencies that tell make which source file depend
+#  on what headers. These get generated at the same time when the source files are compiled
+DEP_FLAGS = -MMD -MP
+CFLAGS = -Wall -Wextra -Werror
+CC = cc
+INCLUDE_PATHS = ./include
+
+# (not used by gcc)
+BUILD_DIR = ./build
+
+# recursive make calls
+# SUB_DIRS :=
+# RECURSIVE_MAKE_FLAGS = --no-print-directory
+# COMPILIED_ARCHIVE_FILE_PATHS :=
+# ARCHIVE_FILES := $(notdir $(LIB_ARCHIVE_FILE_PATH))
+
+# [c] do not warn about library creation
+# [r] eplace existing or insert new file(s) into the archive
+# [U] set time stamps needed for replacement using archive(member) function
+ARFLAGS = rcU
+NAME = libft.a
+
+# List of all default modules (check recipes)
+SUB_MODULES = requent string memory printing lst
+
+# ---------------------------------------------------------------------------------
+# (All variables suffixed with _SRC will be turned into variables suffixed with _OBJ)
+
+BOOL_SRC := \
     ft_isalnum.c \
     ft_isalpha.c \
     ft_isdigit.c \
     ft_isprint.c \
-    ft_isascii.c
-BOOL_OBJ = $(BOOL_SRC:%.c=$(BUILD_DIR)/%.o)
+    ft_isascii.c \
+
+# BOOL_SRC := $(addprefix ./ , $(BOOL_SRC))
+PRINTF_SRC  := \
+    char_specifiers.c \
+    int_specifiers.c \
+    ft_printf.c \
+
+# for specifing a sub directory of the source files.
+# (do not put anything other than a file name after '\', that will make it part of the variable )
+PRINTF_SRC := $(addprefix ft_printf/, $(PRINTF_SRC))
 
 STR_SRC = \
     ft_strlen.c \
@@ -47,8 +84,8 @@ STR_SRC = \
     ft_putendl_fd.c \
     ft_putnbr_fd.c \
     ft_putnbr_base.c
-    
-BONUS_SRC = \
+
+LST_SRC := \
     ft_lstnew.c \
     ft_lstadd_front.c \
     ft_lstlast.c \
@@ -57,66 +94,59 @@ BONUS_SRC = \
     ft_lstdelone.c \
     ft_lstclear.c \
     ft_lstiter.c \
-    ft_lstmap.c
-    
-# adding printf to src files and include dir
+    ft_lstmap.c \
 
-# in the future create a seperate folder for seperate parts that
-# are consistenly structured so you can do recursive make?
-
-
-#VPATH = %.c $(MAKECMDGOALS)
-PRINTF_SRC := \
-    char_specifiers.c \
-    int_specifiers.c \
-    ft_printf.c \
-
-#    ../ft_memcpy.c \
-#    ../ft_memset.c \
-#    ../ft_strlen.c \
-
-PRINTF_SRC := $(addprefix ft_printf/, $(PRINTF_SRC))
-PRINTF_OBJ = $(PRINTF_SRC:%.c=$(BUILD_DIR)/%.o)
-
-# --- ADD A BUILD DIRECTORY
-#NEW_DIR_PATH = build
-#PRINTF_OBJ = $(patsubst %.c, $(BUILD_DIR)/%.o, $(PRINTF_SRC))
-
-
-BUILD_DIR := obj
-
-# ---- INCLUDE DIRECTORY
-INC_DIR = include
-HEADER_FILES = ft_printf.h libft.h
-
-#HEADERS = $(addprefix $(INCLUDE_DIR)/, $(HEADER_FILES))
-OBJ := $(SRC:%.c=$(BUILD_DIR)/%.o)
-LST_OBJ := $(BONUS_SRC:%.c=$(BUILD_DIR)/%.o)
+PRINTING_SRC := \
+    ft_putnbr_base.c \
+    ft_putstr_fd.c \
+    ft_putnbr_fd.c \
+    ft_putendl_fd.c \
 
 # -------------------------------------------------------------------------
+INCLUDE_FLAGS = $(addprefix -I, $(INCLUDE_PATHS))
+CFLAGS += $(INCLUDE_FLAGS)
 
-# [c] do not warn about library creation
-# [r] eplace existing or insert new file(s) into the archive
-# [U] set time stamps needed for replacement
-ARFLAGS = rcU
-NAME = libft.a
+# NOTE: on error delete the archive file ?
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
+# NOTE: put into single file?
 
-#$(NAME):
-	#$(AR) $(ARFLAGS) $@ $?
-#all: $(OBJ) $(NAME)($(OBJ))
+# This needs to be at the end of all variables suffixed with _SRC.
+# Turns all variables suffixed with _SRC variables into variables suffixed with _OBJ,
+# and substitutes %.c for %.o files, prefixed by the build directory.
+ALL_SRC_VARS := $(filter %_SRC, $(.VARIABLES))
+$(foreach var, $(ALL_SRC_VARS), $(eval $(patsubst %_SRC, %_OBJ, $(var)) := $($(var):%.c=$(BUILD_DIR)/%.o)))
 
-all: printf
+# Formatting without ALL_SRC_VARS (is more work two add new src files,
+# but is not creating ambiguous variables).
+# SRC_DIR_BOOL = .
+# BOOL_OBJ := $(patsubst %.c, $(BUILD_DIR)/$(SRC_DIR_BOOL)/%.o, \
+#     ft_isalnum.c \
+#     ft_isalpha.c \
+#     ft_isdigit.c \
+#     ft_isprint.c \
+#     ft_isascii.c \
+# )
+
+# Create dependency files so make knows when a header file belong to a specific
+# obj file has been changed
+ALL_OBJ_VARS := $(filter %_OBJ, $(.VARIABLES))
+ALL_OBJ_DEPS := $(patsubst %.o, %.d, $(foreach var, $(ALL_OBJ_VARS), $($(var))))
+# -------------------------------------------------------------------------
+
+all: $(SUB_MODULES)
+	
 
 $(BUILD_DIR)/%.o: %.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(DEP_FLAGS) $(CFLAGS) -c $< -o $@
 
-printf: $(PRINTF_OBJ) $(NAME)($(PRINTF_OBJ))
+printf: bool $(PRINTF_OBJ) $(NAME)($(PRINTF_OBJ))
 
-bool: $(BOOL_OBJ) $(NAME)
+printing: printf $(PRINTING_OBJ) $(NAME)($(PRINTING_OBJ))
+
+bool: $(BOOL_OBJ) $(NAME)($(BOOL_OBJ))
+
+lst: $(LST_OBJ) $(NAME)($(LST_OBJ))
 
 re: fclean all
 
@@ -126,4 +156,6 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
-.PHONY:	clean fclean re all lst printf
+-include $(ALL_OBJ_DEPS)
+
+.PHONY:	clean fclean re all $(SUB_MODULES)
