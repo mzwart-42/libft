@@ -36,6 +36,7 @@ BOOL_SRC := \
     ft_isdigit.c \
     ft_isprint.c \
     ft_isascii.c \
+    ft_is_int.c \
 
 CTYPE_SRC := \
     ft_tolower.c \
@@ -136,7 +137,7 @@ $(foreach var, $(ALL_SRC_VARS), $(eval $(patsubst %_SRC, %_OBJ, $(var)) := $($(v
 # when an obj dpending on a header needs to be rebuild, when that header file has changed.
 ALL_OBJ_VARS := $(filter %_OBJ, $(.VARIABLES))
 
-ALL_OBJ_DEPS := $(patsubst %.o, %.d, $(foreach var, $(ALL_OBJ_VARS), $($(var))))
+ALL_DEPS := $(patsubst %.o, %.d, $(foreach var, $(ALL_OBJ_VARS), $($(var))))
 # -------------------------------------------------------------------------
 
 all: $(SUB_MODULES)
@@ -170,7 +171,7 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
--include $(ALL_OBJ_DEPS)
+-include $(ALL_DEPS)
 
 .PHONY:	clean fclean re all $(SUB_MODULES)
 
