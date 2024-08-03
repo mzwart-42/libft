@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
-//#include "../include/libft.h"
 
 static void	vec_initialize(t_vector *vec, size_t size)
 {

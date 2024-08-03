@@ -23,13 +23,12 @@ BUILD_DIR = ./build
 ARFLAGS = rcU
 NAME = libft.a
 
-# List of all sub modules made when calling 'Make'. (check recipes for submodules)
-SUB_MODULES = requent string memory printing lst
-# This can be used to change the module list when recursively calling this Makefile.
+# List of all sub modules. create new ones by creating new recipes and adding the target
+SUB_MODULES = bool string stdio stdlib lst
+# This can be used to change the module make will compile when recursively calling this Makefile.
 # use flag: -e SUB_MODULES="list of sub modules here ..."
 
 # ---------------------------------------------------------------------------------
-# (All variables suffixed with _SRC will be turned into variables suffixed with _OBJ)
 
 BOOL_SRC := \
     ft_isalnum.c \
@@ -38,42 +37,40 @@ BOOL_SRC := \
     ft_isprint.c \
     ft_isascii.c \
 
-# BOOL_SRC := $(addprefix ./ , $(BOOL_SRC))
-PRINTF_SRC  := \
-    char_specifiers.c \
-    int_specifiers.c \
-    ft_printf.c \
+CTYPE_SRC := \
+    ft_tolower.c \
+    ft_toupper.c \
 
-# for specifing a sub directory of the source files.
-# (do not put anything other than a file name after '\', that will make it part of the variable )
-PRINTF_SRC := $(addprefix ft_printf/, $(PRINTF_SRC))
-
-STR_SRC = \
+STRING_SRC = \
     ft_strlen.c \
-    ft_memchr.c \
-    ft_memmove.c \
-    ft_memcpy.c \
-    ft_memset.c \
-    ft_memcmp.c \
-    ft_bzero.c \
     ft_strrchr.c \
     ft_strchr.c \
     ft_strlcat.c \
     ft_strlcpy.c \
     ft_strncmp.c \
     ft_strnstr.c \
-    ft_tolower.c \
-    ft_toupper.c \
     ft_strdup.c \
-    ft_calloc.c \
-    ft_atoi.c \
     ft_substr.c \
     ft_strjoin.c \
     ft_strtrim.c \
-    ft_split.c \
-    ft_itoa.c \
-    ft_strmapi.c \
     ft_striteri.c \
+    ft_strmapi.c \
+
+STDLIB_SRC = \
+    ft_atoi.c \
+    ft_itoa.c \
+    ft_calloc.c \
+
+MORE_STUFF = \
+    ft_split.c \
+
+STR_SRC = \
+    ft_memchr.c \
+    ft_memmove.c \
+    ft_memcpy.c \
+    ft_memset.c \
+    ft_memcmp.c \
+    ft_bzero.c \
     ft_putchar_fd.c \
     ft_putstr_fd.c \
     ft_putendl_fd.c \
@@ -91,11 +88,24 @@ LST_SRC := \
     ft_lstiter.c \
     ft_lstmap.c \
 
-PRINTING_SRC := \
+PRINTF_SRC  := \
+    char_specifiers.c \
+    int_specifiers.c \
+    ft_printf.c \
+
+# If source files are in sub directories (ft_printf directory in this case):
+PRINTF_SRC := $(addprefix ft_printf/, $(PRINTF_SRC))
+# this line is using the variables of the previous variable initialization
+# so it has to be bellow the SRC files
+
+STDIO_SRC := \
     ft_putnbr_base.c \
     ft_putstr_fd.c \
     ft_putnbr_fd.c \
     ft_putendl_fd.c \
+
+# MINIMAL_SRC = \
+#     ft_strlen.c \
 
 # -------------------------------------------------------------------------
 INCLUDE_FLAGS = $(addprefix -I, $(INCLUDE_PATHS))
@@ -113,8 +123,8 @@ $(foreach var, $(ALL_SRC_VARS), $(eval $(patsubst %_SRC, %_OBJ, $(var)) := $($(v
 
 # Formatting without ALL_SRC_VARS (is more work two add new src files,
 # but is not creating ambiguous variables).
-# SRC_DIR_BOOL = .
-# BOOL_OBJ := $(patsubst %.c, $(BUILD_DIR)/$(SRC_DIR_BOOL)/%.o, \
+# SRC_DIR_CTYPE = .
+# CTYPE_OBJ := $(patsubst %.c, $(BUILD_DIR)/$(SRC_DIR_CTYPE)/%.o, \
 #     ft_isalnum.c \
 #     ft_isalpha.c \
 #     ft_isdigit.c \
@@ -125,6 +135,7 @@ $(foreach var, $(ALL_SRC_VARS), $(eval $(patsubst %_SRC, %_OBJ, $(var)) := $($(v
 # This does NOT create, but lists the names of the dependency files which 'Make' uses to know
 # when an obj dpending on a header needs to be rebuild, when that header file has changed.
 ALL_OBJ_VARS := $(filter %_OBJ, $(.VARIABLES))
+
 ALL_OBJ_DEPS := $(patsubst %.o, %.d, $(foreach var, $(ALL_OBJ_VARS), $($(var))))
 # -------------------------------------------------------------------------
 
@@ -135,11 +146,18 @@ $(BUILD_DIR)/%.o: %.c
 	@mkdir -p $(@D)
 	$(CC) $(DEP_FLAGS) $(CFLAGS) -c $< -o $@
 
-printf: bool $(PRINTF_OBJ) $(NAME)($(PRINTF_OBJ))
-
-printing: printf $(PRINTING_OBJ) $(NAME)($(PRINTING_OBJ))
-
+# Alias for ctype library :)
 bool: $(BOOL_OBJ) $(NAME)($(BOOL_OBJ))
+
+ctype: bool $(CTYPE_OBJ) $(NAME)($(CTYPE_OBJ))
+
+printf: ctype $(PRINTF_OBJ) $(NAME)($(PRINTF_OBJ))
+
+stdio: printf $(STDIO_OBJ) $(NAME)($(STDIO_OBJ))
+
+# TODO: add more subdivisions to stdlib
+
+stdlib: $(STDLIB_OBJ) $(NAME)($(STDLIB_OBJ))
 
 lst: $(LST_OBJ) $(NAME)($(LST_OBJ))
 
