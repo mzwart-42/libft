@@ -20,6 +20,7 @@
 # include <stdint.h>
 # include <errno.h>
 # include <limits.h>
+#include <stdbool.h>
 
 typedef struct s_list
 {

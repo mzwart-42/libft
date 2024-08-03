@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
-#include "../libft.h"
+#include "libft.h"
 
 char	*string(va_list format_args)
 {

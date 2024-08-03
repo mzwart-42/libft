@@ -23,10 +23,9 @@ BUILD_DIR = ./build
 ARFLAGS = rcU
 NAME = libft.a
 
-# List of all sub modules. create new ones by creating new recipes and adding the target
-SUB_MODULES = bool string stdio stdlib lst
+LIBFT_MODULES ?= bool string stdio stdlib
+# use 'export' in other makefile to set this. or use flag: -e SUB_MODULES="list of sub modules here ..."
 # This can be used to change the module make will compile when recursively calling this Makefile.
-# use flag: -e SUB_MODULES="list of sub modules here ..."
 
 # ---------------------------------------------------------------------------------
 
@@ -140,10 +139,13 @@ ALL_OBJ_VARS := $(filter %_OBJ, $(.VARIABLES))
 ALL_DEPS := $(patsubst %.o, %.d, $(foreach var, $(ALL_OBJ_VARS), $($(var))))
 # -------------------------------------------------------------------------
 
-all: $(SUB_MODULES)
+all: $(LIBFT_MODULES)
+
+$(NAME):
+	$(AR) $(ARFLAGS) $(NAME)
 
 $(BUILD_DIR)/%.o: %.c
-	@mkdir -p $(@D)
+	@mkdir -p $(dir $@)
 	$(CC) $(DEP_FLAGS) $(CFLAGS) -c $< -o $@
 
 # Alias for ctype library :)
@@ -163,7 +165,6 @@ stdlib: $(STDLIB_OBJ) $(NAME)($(STDLIB_OBJ))
 
 lst: $(LST_OBJ) $(NAME)($(LST_OBJ))
 
-re: fclean all
 
 clean:
 	rm -rf $(BUILD_DIR)
@@ -171,9 +172,8 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
+re: fclean all
+
 -include $(ALL_DEPS)
 
-.PHONY:	clean fclean re all $(SUB_MODULES)
-
-#.RECIPE: print-%
-#    @echo "$*"
+.PHONY:	clean fclean re all $(ALL_MODULES)
