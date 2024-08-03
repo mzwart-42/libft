@@ -20,7 +20,7 @@
 # include <stdint.h>
 # include <errno.h>
 # include <limits.h>
-#include <stdbool.h>
+# include <stdbool.h>
 
 typedef struct s_list
 {
@@ -44,8 +44,8 @@ int			ft_isalpha(int c);
 int			ft_isdigit(int c);
 int			ft_isascii(int c);
 int			ft_isprint(int c);
-bool			ft_is_int(char *str);
-bool			ft_is_int32(char *str);
+bool		ft_is_int(char *str);
+bool		ft_is_int32(char *str);
 
 // ctype
 int			ft_tolower(int c);
