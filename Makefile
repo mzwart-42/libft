@@ -55,6 +55,11 @@ STRING_SRC = \
     ft_strtrim.c \
     ft_striteri.c \
     ft_strmapi.c \
+    ft_memset.c \
+    ft_memcpy.c \
+    ft_memcmp.c \
+    ft_memmove.c \
+    ft_memchr.c \
 
 STDLIB_SRC = \
     ft_atoi.c \
@@ -65,11 +70,6 @@ MORE_STUFF = \
     ft_split.c \
 
 STR_SRC = \
-    ft_memchr.c \
-    ft_memmove.c \
-    ft_memcpy.c \
-    ft_memset.c \
-    ft_memcmp.c \
     ft_bzero.c \
     ft_putchar_fd.c \
     ft_putstr_fd.c \
@@ -140,7 +140,6 @@ ALL_OBJ_DEPS := $(patsubst %.o, %.d, $(foreach var, $(ALL_OBJ_VARS), $($(var))))
 # -------------------------------------------------------------------------
 
 all: $(SUB_MODULES)
-	
 
 $(BUILD_DIR)/%.o: %.c
 	@mkdir -p $(@D)
@@ -151,7 +150,9 @@ bool: $(BOOL_OBJ) $(NAME)($(BOOL_OBJ))
 
 ctype: bool $(CTYPE_OBJ) $(NAME)($(CTYPE_OBJ))
 
-printf: ctype $(PRINTF_OBJ) $(NAME)($(PRINTF_OBJ))
+string: $(STRING_OBJ) $(NAME)($(STRING_OBJ))
+
+printf: string ctype $(PRINTF_OBJ) $(NAME)($(PRINTF_OBJ))
 
 stdio: printf $(STDIO_OBJ) $(NAME)($(STDIO_OBJ))
 
