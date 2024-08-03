@@ -37,16 +37,21 @@ void		ft_lstclear(t_list **lst, void (*f)(void *content));
 void		ft_lstiter(t_list *lst, void (*f)(void *content));
 t_list		*ft_lstmap(t_list *l, void *(*f)(void *ct), void(*d)(void *ct));
 
-// compare stuff
+// bool
 int			ft_isalnum(int c);
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
 int			ft_isascii(int c);
 int			ft_isprint(int c);
-int			ft_memcmp(const void *block1, const void *block2, size_t n);
-int			ft_strncmp(const char *s1, const char *s2, size_t n);
+bool			ft_is_int(char *str);
+bool			ft_is_int32(char *str);
+
+// ctype
 int			ft_tolower(int c);
 int			ft_toupper(int c);
+
+int			ft_memcmp(const void *block1, const void *block2, size_t n);
+int			ft_strncmp(const char *s1, const char *s2, size_t n);
 
 // mem stuff
 void		*ft_memchr(const void *str, int c, size_t n);

@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_is_int.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzwart <mzwart@student.codam.nl>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/03 13:14:11 by mzwart            #+#    #+#             */
+/*   Updated: 2024/08/03 13:14:28 by mzwart           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include <stdint.h>
 #include <stdbool.h>
 // #include "ft_bool.h"
 
-bool ft_is_int(char *str)
+bool	ft_is_int(char *str)
 {
 	int	number;
 
@@ -21,7 +33,7 @@ bool ft_is_int(char *str)
 	return (true);
 }
 
-bool ft_is_int32(char *str)
+bool	ft_is_int32(char *str)
 {
 	int32_t	number;
 
@@ -38,4 +50,3 @@ bool ft_is_int32(char *str)
 	}
 	return (true);
 }
-
