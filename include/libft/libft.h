@@ -6,7 +6,7 @@
 /*   By: mzwart <mzwart@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 19:33:14 by mzwart            #+#    #+#             */
-/*   Updated: 2023/11/15 19:33:40 by mzwart           ###   ########.fr       */
+/*   Updated: 2024/08/08 16:10:07 by mzwart           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LIBFT_H
@@ -20,7 +20,8 @@
 # include <stdint.h>
 # include <errno.h>
 # include <limits.h>
-# include <stdbool.h>
+
+# include "ft_bool.h"
 
 typedef struct s_list
 {
@@ -38,14 +39,6 @@ void		ft_lstclear(t_list **lst, void (*f)(void *content));
 void		ft_lstiter(t_list *lst, void (*f)(void *content));
 t_list		*ft_lstmap(t_list *l, void *(*f)(void *ct), void(*d)(void *ct));
 
-// bool
-int			ft_isalnum(int c);
-int			ft_isalpha(int c);
-int			ft_isdigit(int c);
-int			ft_isascii(int c);
-int			ft_isprint(int c);
-bool		ft_is_int(char *str);
-bool		ft_is_int32(char *str);
 
 // ctype
 int			ft_tolower(int c);
@@ -60,7 +53,6 @@ void		*ft_memcpy(void *dest, const void *src, size_t n);
 void		*ft_memmove(void *dest, const void *src, size_t n);
 void		*ft_memset(void *block, int c, size_t n);
 void		*ft_bzero(void *block, size_t n);
-void		*ft_calloc(size_t num_elems, size_t elem_size);
 
 // string functions
 char		*ft_strchr(const char *str, int c);
@@ -76,8 +68,12 @@ char		*ft_strtrim(const char *s1, const char *set);
 char		**ft_split(const char *str, char delimiter);
 char		*ft_strmapi(const char *str, char (*f)(unsigned int i, char c));
 void		ft_striteri(char *str, void (*f)(unsigned int i, char *c));
-int			ft_atoi(const char *str);
-char		*ft_itoa(int number);
+
+// # ft_stdlib.h
+int		ft_atoi(const char *str);
+char	*ft_itoa(int number);
+double		ft_atof(const char *str);
+void		*ft_calloc(size_t num_elems, size_t elem_size);
 
 // file desciptor functions
 void		ft_putchar_fd(char c, int fd);

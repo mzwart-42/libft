@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libft/libft.h"
 #include <fcntl.h>
 
 static void	*reverse_str(char *str, int str_len)

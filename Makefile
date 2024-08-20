@@ -4,8 +4,12 @@ GREEN := $(shell tput -T xterm setaf 2)
 YELLOW := $(shell tput -T xterm setaf 3)
 BLUE := $(shell tput -T xterm setaf 4)
 PURPLE := $(shell tput -T xterm setaf 5)
+CYAN := $(shell tput -T xterm setaf 6)
 WHITE := $(shell tput -T xterm setaf 7)
-RESET := $(shell tput -T xterm setaf sgr0)
+RESET := $(shell tput -T xterm setaf 7)
+# TODO:NO WORKY
+#RESET := $(shell tput -T xterm setaf sgr0)
+
 # ------------------------------ configurable -----------------------------------
 # -MMD generates makefile dependencies that tell make which source file depend
 #  on what headers. These get generated at the same time when the source files are compiled
@@ -27,9 +31,11 @@ LIBFT_MODULES ?= bool string stdio stdlib
 # use 'export' in other makefile to set this. or use flag: -e SUB_MODULES="list of sub modules here ..."
 # This can be used to change the module make will compile when recursively calling this Makefile.
 
-# ---------------------------------------------------------------------------------
+# ---------------------------------- Files --------------------------------------
 
+# ft_bool.h
 BOOL_SRC := \
+    ft_isdecimal.c \
     ft_isalnum.c \
     ft_isalpha.c \
     ft_isdigit.c \
@@ -37,6 +43,7 @@ BOOL_SRC := \
     ft_isascii.c \
     ft_is_int.c \
 
+# ft_ctype.h
 CTYPE_SRC := \
     ft_tolower.c \
     ft_toupper.c \
@@ -65,6 +72,7 @@ STDLIB_SRC = \
     ft_atoi.c \
     ft_itoa.c \
     ft_calloc.c \
+    ft_atof.c \
 
 MORE_STUFF = \
     ft_split.c \
@@ -145,8 +153,10 @@ $(NAME):
 	$(AR) $(ARFLAGS) $(NAME)
 
 $(BUILD_DIR)/%.o: %.c
+	@echo -n $(GREEN)
 	@mkdir -p $(dir $@)
 	$(CC) $(DEP_FLAGS) $(CFLAGS) -c $< -o $@
+	@echo -n $(CYAN)
 
 # Alias for ctype library :)
 bool: $(BOOL_OBJ) $(NAME)($(BOOL_OBJ))
@@ -161,19 +171,26 @@ stdio: printf $(STDIO_OBJ) $(NAME)($(STDIO_OBJ))
 
 # TODO: add more subdivisions to stdlib
 
-stdlib: $(STDLIB_OBJ) $(NAME)($(STDLIB_OBJ))
+stdlib: bool $(STDLIB_OBJ) $(NAME)($(STDLIB_OBJ))
 
 lst: $(LST_OBJ) $(NAME)($(LST_OBJ))
 
 
 clean:
+	@echo -n $(RED)
 	rm -rf $(BUILD_DIR)
+	@echo -n $(RESET)
 
 fclean: clean
+	@echo -n $(RED)
 	rm -f $(NAME)
+	@echo -n $(RESET)
+
 
 re: fclean all
 
 -include $(ALL_DEPS)
 
 .PHONY:	clean fclean re all $(ALL_MODULES)
+
+.NOTPARALLEL: all

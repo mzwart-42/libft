@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libft/libft.h"
 #include <stdint.h>
 #include <stdbool.h>
-// #include "ft_bool.h"
+// #include "libft/ft_bool.h"
 
 bool	ft_is_int(char *str)
 {

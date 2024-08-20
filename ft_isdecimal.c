@@ -1,27 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_isdecimal.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzwart <mzwart@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mzwart <mzwart@student.codam.nl>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/15 19:21:55 by mzwart            #+#    #+#             */
-/*   Updated: 2023/11/20 18:00:51 by mzwart           ###   ########.fr       */
+/*   Created: 2024/08/08 16:02:25 by mzwart            #+#    #+#             */
+/*   Updated: 2024/08/08 16:10:47 by mzwart           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+int	ft_isdecimal(const char *nptr)
 {
-	if (!s)
-		return ;
-	write(fd, s, ft_strlen(s));
-}
-/*
-int main()
-{
-	char *buf = "aaa";
-	ft_putendl_fd(buf , 1);
+	bool	dot;
+
+	dot = false;
+	if (*nptr == '-')
+		++nptr;
+	while (*nptr)
+	{
+		if (!dot && *nptr == '.')
+			dot = true;
+		else if (ft_isdigit(*nptr))
+			;
+		else
+			return (false);
+		++nptr;
 	}
-*/
+	return (true);
+};
