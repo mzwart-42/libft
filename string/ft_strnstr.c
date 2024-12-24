@@ -14,29 +14,26 @@
 
 /*
  @needle: null terminated string
- @haystack: string
- @len: length of the haystack that is being searched for
+ @hay: string
+ @len: length of the hay that is being searched for
 
  function returns:
-	- haystack if length of needle is 0.
-	- first occurence of needle in haystack if it is found.
-	- NULL if needle is not found
+	- hay if length of needle is 0
+	- first occurence of the needle in hay if needle is found
+	- NULL if the needle is not found
 */
 
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+// TODO: make with real strnstr
+char	*ft_strnstr(const char *hay, const char *needle, size_t search_len)
 {
-	const size_t	needle_len = ft_strnlen(needle, len);
-	const char		*end_haystack = ft_strnlen(haystack, len) - needle_len);
+	const size_t	needle_len = ft_strlen(needle);
 
-	if (needle_len == 0)
-		return ((char *)haystack);
-	while (*haystack && haystack <= end_haystack)
+	while (needle_len <= search_len--)
 	{
-		if (haystack[0] == needle[0] && \
-			(needle_len == 1 || ft_strncmp(haystack, needle, needle_len) == 0))
-			return ((char *)haystack);
+		if (ft_strncmp(hay, needle, needle_len) == 0)
+			return ((char *)hay);
 		else
-			++haystack;
+			++hay;
 	}
 	return (NULL);
 }
@@ -45,14 +42,13 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 //
 //  int main()
 //  {
-// 	char haystack[30] = "aaabcabcd";
-// 	char needle[10] = "aabc";
+// 	char hay[30] = "aabc";
+// 	char needle[10] = "b";
 //  	char *ptr;
-// 	int len = -1;
-//  	ptr = strnstr(haystack, needle, len);
-//  	printf("real:%s\n", ptr);
-//  	ptr = ft_strnstr(haystack, needle, len);
+// 	int len = 3;
+//  	//ptr = strnstr(hay, needle, len);
+//  	//printf("real:%s\n", ptr);
+//  	ptr = ft_strnstr(hay, needle, len);
 //  	printf("mine:%s", ptr);
-//
 //  	return 0;
 //  }

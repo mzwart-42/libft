@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
+#include "libft/string.h"
 
 size_t	ft_strnlen(const char *str, size_t max_len)
 {
 	const char	*str_origin = str;
 
-	while (*str && (str_origin - str) < max_len)
+	while (*str && (size_t)(str_origin - str) < max_len)
 		++str;
 	return (str - str_origin);
 }

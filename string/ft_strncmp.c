@@ -27,15 +27,15 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (0);
 }
 
-#include <string.h>
-#include <stdio.h>
-int	main(int argc, char *argv[])
-{
-	char *str = "abcd";
-	char *str2 = "abcdxyz";
-	int size;
-	size = strlen(str) + 1;
-	printf("mine:%d\n", ft_strncmp(str, str2, size));
-	printf("real:%d\n", strncmp(str, str2, size));
-	return 0;
-}
+// #include <string.h>
+// #include <stdio.h>
+// int	main(int argc, char *argv[])
+// {
+// 	char *str = "abcd";
+// 	char *str2 = "abcdxyz";
+// 	int size;
+// 	size = strlen(str) + 1;
+// 	printf("mine:%d\n", ft_strncmp(str, str2, size));
+// 	printf("real:%d\n", strncmp(str, str2, size));
+// 	return 0;
+// }
